@@ -1,0 +1,21 @@
+name: Trigger VIO_V1 Update
+
+on:
+  release:
+    types: [published]
+
+jobs:
+  trigger-update:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Bước 1: Gửi yêu cầu HTTP tới workflow trên VIO_V1
+      - name: Trigger VIO_V1 Workflow
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          curl -X POST \
+          -H "Accept: application/vnd.github.v3+json" \
+          -H "Authorization: token $GITHUB_TOKEN" \
+          https://api.github.com/repos/minhvogremsy/VIO_V1/actions/workflows/update_v1.yml/dispatches \
+          -d '{"ref":"main"}'
